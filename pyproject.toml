@@ -4,4 +4,4 @@ version = "0.1.0"
 description = "Pipeline d'analyse des logs SSH"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["psycopg2-binary>=2.9"]

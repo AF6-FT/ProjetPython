@@ -5,6 +5,7 @@ from ingestion import raw
 from processing import extract_transforme
 from processing import geo_location
 from storage import results
+from storage import database
 from serving import dashboard
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -28,11 +29,13 @@ def main():
                 record["country"] = location.get("country", "Unknown")
                 records.append(record)
         results.save_results(records, BASE_DIR / "output" / "analysis.csv")
+        database.save_to_database(records)
         dashboard.create_dashboard(records, BASE_DIR / "output" / "dashboard.html")
         print("Analyse terminée.")
         print("Événements analysés :", len(records))
         print("CSV :", BASE_DIR / "output" / "analysis.csv")
         print("Dashboard :", BASE_DIR / "output" / "dashboard.html")
+        print("Base de données : PostgreSQL (voir logs/app.log en cas d'erreur)")
     except Exception:
         logger.exception("Erreur générale pendant l'exécution du pipeline")
         print("Une erreur est survenue. Consultez logs/app.log.")
